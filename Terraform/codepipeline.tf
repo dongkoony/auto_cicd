@@ -1,6 +1,6 @@
 resource "aws_codepipeline" "my_codepipeline" {
     name     = var.codepipeline_name    #CodePipeline 이름
-    role_arn = "arn:aws:iam::${var.aws_account_id}:role/service-role/AWS-CodePipeline-Service"  # AWS Account ID
+    role_arn = "arn:aws:iam::245556669603:role/AWS-CodePipeline-Service"  # AWS Account ID
 
     artifact_store {
         location = var.codepipeline_artifact_store_location     #CodePipeline 아티팩트 저장 S3 버킷 위치
@@ -16,6 +16,11 @@ resource "aws_codepipeline" "my_codepipeline" {
             provider         = "CodeCommit"
             version          = "1"
             output_artifacts = ["SourceArtifact"]
+
+            configuration = {
+                RepositoryName = var.codecommit_repository_name   #CodeCommit 저장소 이름
+                BranchName     = var.codecommit_repository_branch #CodeCommit 저장소 브랜치 이름
+            }
         }
     }
 
