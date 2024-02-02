@@ -24,8 +24,8 @@ resource "aws_db_instance" "three_rds" {
     allocated_storage = 30 # rds instance 스토리지 크기(GB)
     storage_type = "gp2" # rds instance 스토리지 타입
     storage_encrypted = false # rds instance 스토리지 암호화 여부
-    username = "threerds" # rds instance 계정 이름
-    password = "admin1234!!" # rds instance 계정 비밀번호
+    username = var.db_username # rds instance 계정 이름
+    password = var.db_password # rds instance 계정 비밀번호
     parameter_group_name = aws_db_parameter_group.three_rds_parameter.name # rds instance 파라미터 그룹 이름
     skip_final_snapshot = true # rds instance 종료 시 스냅샷 생성 여부
     multi_az = false # rds instance 복제 여부
