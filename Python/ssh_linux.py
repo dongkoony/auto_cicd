@@ -3,6 +3,7 @@ import json
 import os
 import boto3
 from jinja2 import Environment, FileSystemLoader
+from pathlib import Path
 
 # S3 bucket Auto Save
 def save_data_to_s3(data, bucket_name, s3_key):
@@ -10,11 +11,13 @@ def save_data_to_s3(data, bucket_name, s3_key):
     formatted_data = json.dumps(data, indent=4)
     s3.put_object(Body=formatted_data, Bucket=bucket_name, Key=s3_key)
 
-# 템플릿 디렉터리 설정
-TEMPLATE_DIR = r"C:\project\MTE-Project\backend\templates"
+# 현재 파일의 디렉터리를 기준으로 상대 경로를 사용하여 템플릿 디렉터리 설정
+current_file_path = Path(__file__).resolve()
+project_root = current_file_path.parent.parent  # 필요에 따라 .parent 호출 횟수 조정
+TEMPLATE_DIR = project_root / "Python" / "Template"
 
-# Jinja2 환경 설정
-env = Environment(loader=FileSystemLoader(TEMPLATE_DIR))
+# Jinja2 환경 설정에 TEMPLATE_DIR 사용
+env = Environment(loader=FileSystemLoader(str(TEMPLATE_DIR)))
 
 def get_server_info(host, port, username, password=None, key_path=None):
     client = paramiko.SSHClient()
@@ -76,8 +79,8 @@ def get_data_from_s3(bucket_name, s3_key):
     json_data = json.loads(response['Body'].read().decode('utf-8'))
     return json_data
 
-def convert_json_to_terraform(json_data):
-    return get_terraform_template(json_data)
+#def convert_json_to_terraform(json_data):
+#    return get_terraform_template(json_data)
 
 def connect_and_save_to_s3(host, port, username, password=None, key_path=None, bucket_name="mte-project", s3_key="json(terraform)/server_info.json"):
     server_info = get_server_info(host, port, username, password, key_path)

@@ -1,0 +1,8 @@
+resource "aws_instance" "example" {
+  ami           = "{{ '{{ ami_id }}' }}"
+  instance_type = "{{ '{{ instance_type }}' }}"
+  
+  tags = {
+    Name = "ExampleInstance"
+  }
+}
